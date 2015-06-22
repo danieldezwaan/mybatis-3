@@ -264,7 +264,12 @@ public class XPathParser {
     this.validation = validation;
     this.entityResolver = entityResolver;
     this.variables = variables;
-    XPathFactory factory = XPathFactory.newInstance();
+    //XPathFactory factory = XPathFactory.newInstance();
+	//Handle issues with empty constructor explained in https://saxonica.plan.io/issues/1944
+	XPathFactory factory = XPathFactory.newInstance(
+		XPathFactory.DEFAULT_OBJECT_MODEL_URI,
+		"net.sf.saxon.xpath.XPathFactoryImpl",
+		ClassLoader.getSystemClassLoader());
     this.xpath = factory.newXPath();
   }
 
