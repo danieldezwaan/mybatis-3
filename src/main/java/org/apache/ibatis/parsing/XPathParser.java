@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 
 import org.apache.ibatis.builder.BuilderException;
 import org.w3c.dom.Document;
@@ -266,10 +267,15 @@ public class XPathParser {
     this.variables = variables;
     //XPathFactory factory = XPathFactory.newInstance();
 	//Handle issues with empty constructor explained in https://saxonica.plan.io/issues/1944
-	XPathFactory factory = XPathFactory.newInstance(
-		XPathFactory.DEFAULT_OBJECT_MODEL_URI,
-		"net.sf.saxon.xpath.XPathFactoryImpl",
-		ClassLoader.getSystemClassLoader());
+    XPathFactory factory = null;
+    try {
+      factory = XPathFactory.newInstance(
+              XPathFactory.DEFAULT_OBJECT_MODEL_URI,
+              "net.sf.saxon.xpath.XPathFactoryImpl",
+              ClassLoader.getSystemClassLoader());
+    } catch (XPathFactoryConfigurationException e) {
+      e.printStackTrace();
+    }
     this.xpath = factory.newXPath();
   }
 
